@@ -9,10 +9,10 @@
 	- $\hat{x}_k$: $k$ 시간의 추정 값 (State Estimate)
 	- $P_k$: 오차 공분산 (Error Covariance), 추정 값의 불확실성(Uncertainty)
 - **시스템 모델 매개변수**
-	  - $A$: 상태 전이 행렬 (State Transition Matrix), 이전 상태에서 현재 상태로 변화하는 규칙을 기술
-	  - $H$: 관측 행렬 (Obsevation Matrix), 상태 변수와 측정 값 사이의 관계를 기술
-	  - $Q$: 시스템 노이즈 공분산 (Process Noise), 모델 자체의 노이즈(불확실성)
-	  - $R$: 측정 노이즈 공분산 (Measurement Noise), 센서 자체의 노이즈(불확실성)
+	- $A$: 상태 전이 행렬 (State Transition Matrix), 이전 상태에서 현재 상태로 변화하는 규칙을 기술
+	- $H$: 관측 행렬 (Obsevation Matrix), 상태 변수와 측정 값 사이의 관계를 기술
+	- $Q$: 시스템 노이즈 공분산 (Process Noise), 모델 자체의 노이즈(불확실성)
+	- $R$: 측정 노이즈 공분산 (Measurement Noise), 센서 자체의 노이즈(불확실성)
 
 ## 알고리즘 루프
 
