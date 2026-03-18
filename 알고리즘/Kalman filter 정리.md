@@ -24,11 +24,14 @@
 
 **1-1. 상태 변수 예측 ($\hat{x}_k^-$):**
 - 시스템 모델 중 상태 전이 행렬($A$)만 사용해서 다음 $k$ 시간의 상태를 예측함.
+
 $$
 \hat{x}_k^- = A\hat{x}_{k-1}
 $$
+
 **1-2. 예측 오차 공분산 계산 ($P_k^-$):**
 - 시간이 흐름에 따라 불확실성($P$)이 시스템 노이즈 공분산($Q$)만큼 커진다.
+
 $$
 P_k^- = AP_{k-1}A^T + Q
 $$
@@ -38,15 +41,19 @@ $$
 
 **2-1. 칼만 게인 계산 ($K_k$):**
 - 예측 값의 불확실성($P^-$)과 센서의 불확실성($R$)을 비교
+
 $$
 K_k = P_k^-H^T \left(HP_k^-H^T + R\right)^{-1}
-$$**2-2. 추정 값 보정 ($\hat{x}_k$)**
+$$
+
+**2-2. 추정 값 보정 ($\hat{x}_k$)**
 - 예측 값 ($\hat{X}_k^-$)에 이노베이션 $\tilde{y}_k$(실제 측정 값($z_k$)과 예측 값의 차이)를 칼만 게인만큼 곱하고 더한다.
-- 
-- $z_k - H\hat{x}_k^-$ 부분을 이노베이션(Innovation) 또는 잔차(Residual)라고 부른다.
+- 이노베이션(Innovation) 또는 잔차(Residual)라고 부른다.
+
 $$
 \tilde{y}_k = z_k - H\hat{x}_k^- \\
 $$
+
 $$
 \hat{x}_k = \hat{x}_k^- + K_k\tilde{y}_k
 $$
@@ -55,17 +62,20 @@ $$
 - 새로운 측정 정보를 반영했으므로, 추정 값의 불확실성($P$)을 낮출 수 있다.
 - $(I - K_kH)$는 항상 1보다 작은 값을 가지므로, 측정 값($z_k$)를 반영하는 순간 불확실성($P$)는 무조건 줄어들게 된다.
 - $k$ 시간 측정을 건너뛰면 $P$는 계속 커지게 된다.
+
 $$
 P_k = (I - K_kH)P_k^-
 $$
+
 ## 3. 센서 스케쥴링 로직
 
 **스케쥴링 지점 판단**:
 - $T_{max}$: 최대 샘플링 주기
-- $2\sqrt(P_k^-)$는 통계적으로 약 95%의 신뢰 수준을 의미한다.
+- $2\sqrt{P_k^-}$는 통계적으로 약 95%의 신뢰 수준을 의미한다.
+
 $$
 \begin{aligned}
-&\text{IF } (2\sqrt{P_k^-} \le Threshold) \text{ AND } (\text{Current Age} \lt T_{max}) \text{ THEN} \\
+&\text{IF } (2\sqrt{P_k^-} \le Threshold) \text{ AND } (\text{Age} \lt T_{max}) \text{ THEN} \\
 &\quad \hat{x}_k = \hat{x}_k^- \\
 &\quad P_k = P_k^- \\
 &\text{ELSE} \\
@@ -73,4 +83,14 @@ $$
 &\quad P_k = (I - K_kH)P_k^- \\
 &\text{END IF}
 \end{aligned}
+$$
+
+또는 아래와 같이 표현 가능
+
+$$
+\hat{x}_k, P_k = 
+\begin{cases} 
+\hat{x}_k^-, P_k^- & \text{if } (2\sqrt{P_k^-} \le \text{Threshold}) \text{ and } (\text{Age} \lt T_{max}) \\
+\text{Update by } z_k & \text{otherwise}
+\end{cases}
 $$
