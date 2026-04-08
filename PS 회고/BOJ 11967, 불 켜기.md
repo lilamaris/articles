@@ -1,0 +1,141 @@
+## 문제
+
+농부 존은 최근에 N × N개의 방이 있는 거대한 헛간을 새로 지었다. 각 방은 (1, 1)부터 (N,N)까지 번호가 매겨져있다(2 ≤ N ≤ 100). 어둠을 무서워하는 암소 베시는 최대한 많은 방에 불을 밝히고 싶어한다.
+
+베시는 유일하게 불이 켜져있는 방인 (1, 1)방에서 출발한다. 어떤 방에는 다른 방의 불을 끄고 켤 수 있는 스위치가 달려있다. 예를 들어, (1, 1)방에 있는 스위치로 (1, 2)방의 불을 끄고 켤 수 있다. 베시는 불이 켜져있는 방으로만 들어갈 수 있고, 각 방에서는 상하좌우에 인접한 방으로 움직일 수 있다.
+
+베시가 불을 켤 수 있는 방의 최대 개수를 구하시오.
+
+## 입력
+
+첫 번째 줄에는 N(2 ≤ N ≤ 100)과, M(1 ≤ M ≤ 20,000)이 정수로 주어진다.
+
+다음 M줄에는 네 개의 정수 x, y, a, b가 주어진다. (x, y)방에서 (a, b)방의 불을 켜고 끌 수 있다는 의미이다. 한 방에 여러개의 스위치가 있을 수 있고, 하나의 불을 조절하는 스위치 역시 여러개 있을 수 있다.
+
+## 출력
+
+베시가 불을 켤 수 있는 방의 최대 개수를 출력하시오.
+
+## 예제 입력 1
+
+```
+3 6
+1 1 1 2
+2 1 2 2
+1 1 1 3
+2 3 3 1
+1 3 1 2
+1 3 2 1
+```
+
+## 예제 출력 1
+
+```
+5
+```
+
+---
+
+## 노트
+
+1. 처음에 상태 공간 탐색으로 시도했었는데 불이 켜진 조합을 모두 표현하는건 너무 커져서 실패
+2. 스위치로 불을 켤지 말지 정할 필요는 없고, 방문한 노드의 스위치로 불을 켠 방이 지금까지 방문한 경로 상 도달할 수 있는 노드인지 확인할 필요가 있었다.
+
+```cpp
+#include <iostream>
+#include <queue>
+#define IO std::cin.tie(NULL), std::ios_base::sync_with_stdio(false)
+
+#define MAX 101
+
+std::vector<std::pair<int, int>> switchs[MAX][MAX];
+bool light[MAX][MAX];
+bool visited[MAX][MAX];
+
+int dr[4] = {1, -1, 0, 0};
+int dc[4] = {0, 0, 1, -1};
+
+int N, M;
+
+struct State {
+  int r;
+  int c;
+};
+
+int bfs(State start) {
+  std::queue<State> Q;
+  auto [sr, sc] = start;
+  light[sr][sc] = true;
+  visited[sr][sc] = true;
+
+  Q.push(start);
+
+  int result = 1;
+
+  while (!Q.empty()) {
+    auto [qr, qc] = Q.front();
+    Q.pop();
+
+    // 해당 방에 스위치가 있으면, 불을 켠다.
+    for (auto sw : switchs[qr][qc]) {
+      auto [sw_r, sw_c] = sw;
+      // 이미 스위치가 불을 켤 수 있는 방의 불이 켜져 있으면 생략
+      if (light[sw_r][sw_c]) {
+        continue;
+      }
+
+      // 스위치가 불을 켤 수 있는 방의 불이 꺼져 있으면 불을 켠다
+      light[sw_r][sw_c] = true;
+      result++;
+
+      for (int i = 0; i < 4; i++) {
+        int nr = sw_r + dr[i];
+        int nc = sw_c + dc[i];
+
+        // 만약 스위치로 불을 켠 방이 방문 경로 상 접근할 수 있는 방이고,
+        // 그 방을 방문한 적이 없다면, 방문한다
+        if (0 < nr && nr <= N && 0 < nc && nc <= N) {
+          if (visited[nr][nc] && !visited[sw_r][sw_c]) {
+            visited[sw_r][sw_c] = true;
+            Q.push({sw_r, sw_c});
+          }
+        }
+      }
+    }
+
+    for (int i = 0; i < 4; i++) {
+      int nr = qr + dr[i];
+      int nc = qc + dc[i];
+
+      if (0 < nr && nr <= N && 0 < nc && nc <= N) {
+        // 불이 켜져있고, 방문하지 않았으면, 방문한다
+        if (light[nr][nc] && !visited[nr][nc]) {
+          visited[nr][nc] = true;
+          Q.push({nr, nc});
+        }
+      }
+    }
+  }
+
+  return result;
+}
+
+void solve() {
+  std::cin >> N >> M;
+
+  int r, c, sw_r, sw_c;
+  for (int i = 0; i < M; i++) {
+    std::cin >> r >> c >> sw_r >> sw_c;
+    switchs[r][c].push_back({sw_r, sw_c});
+  }
+
+  State start = {1, 1};
+  std::cout << bfs(start);
+}
+
+int main() {
+  IO;
+  solve();
+  return 0;
+}
+```
