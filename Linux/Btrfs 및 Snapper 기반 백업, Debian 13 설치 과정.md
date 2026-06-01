@@ -1,3 +1,7 @@
+---
+published: 2026-02-13
+---
+
 ## 설치 미디어로 부팅
 1. `Expert Install` 옵션으로 진행
 2. `disk partitioning` 단계 전까지 시스템 옵션 설정

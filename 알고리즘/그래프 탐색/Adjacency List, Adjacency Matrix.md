@@ -1,3 +1,7 @@
+---
+published: 2026-03-09
+---
+
 정점 간 링크를 표현하는 방법 중 `Adjacency List`와 `Adjacency Matrix` 에 대한 개념
 
 ### Adjacency List

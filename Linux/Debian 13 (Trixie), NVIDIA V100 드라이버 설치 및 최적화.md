@@ -1,3 +1,7 @@
+---
+published: 2026-02-14
+---
+
 # 환경
 
 - OS: Debian 13 (Trixie)

@@ -1,3 +1,7 @@
+---
+published: 2026-01-14
+---
+
 
 Chenggen Pu 1,2,* , Han Yang 2,3 , Ping Wang 2,3 and Changjie Dong 2
 Electronics 2023, 12, 1499. https://doi.org/10.3390/electronics12061499
