@@ -1,5 +1,6 @@
 ---
 published: 2026-02-20
+draft: "true"
 ---
 
 K8S 클러스터에서 GPU 자원을 활용하기 위해 `nvidia/gpu-operator`를 추가하던 도중, 파드에서 `nvidia-smi` 명령을 실행하지 못하고 서버의 메모리 자원을 모두 소모하다 OOM 이 발생했습니다.

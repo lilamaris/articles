@@ -1,5 +1,6 @@
 ---
 published: 2026-06-01
+draft: "true"
 ---
 
 K8S 에 사설 도커 레지스트리를 올렸는데, 이미지를 만들고, 레지스트리에 Push 할 때마다 Payload too large 413 에러를 받았다. 
