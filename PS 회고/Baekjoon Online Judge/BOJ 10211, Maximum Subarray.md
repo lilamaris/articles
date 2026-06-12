@@ -1,7 +1,6 @@
 ---
 published: 2026-02-27
 ---
-
 ## 문제
 
 크기 N인 정수형 배열 X가 있을 때, X의 부분 배열(X의 연속한 일부분) 중 각 원소의 합이 가장 큰 부분 배열을 찾는 Maximum subarray problem(최대 부분배열 문제)은 컴퓨터 과학에서 매우 잘 알려져 있다.
@@ -19,3 +18,42 @@ published: 2026-02-27
 ## 출력
 
 각 테스트케이스 별로 maximum subarray의 합을 줄로 구분하여 출력한다.
+
+---
+
+## 내 구현
+
+```cpp
+#include <algorithm>
+#include <iostream>
+#define IO std::cin.tie(NULL), std::ios_base::sync_with_stdio(false)
+
+#define MAX 1000
+
+int T, N, A[MAX];
+
+void solve() {
+  std::cin >> T;
+
+  while (T--) {
+    std::cin >> N;
+
+    int res = -987654321;
+    for (int i = 0; i < N; i++) {
+      std::cin >> A[i];
+      if (i != 0) {
+        A[i] = std::max(A[i] + A[i - 1], A[i]);
+      }
+      res = std::max(A[i], res);
+    }
+
+    std::cout << res << '\n';
+  }
+}
+
+int main() {
+  IO;
+  solve();
+  return 0;
+}
+```
